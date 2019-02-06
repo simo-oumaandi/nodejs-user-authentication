@@ -2,6 +2,12 @@
 
 const express = require('express');
 const router = express.Router();
+//ENCRYPTING PASSWORD
+const bcrypt = require('bcryptjs');
+
+
+//USER MODELS
+const User = require('../models/Users');
 
 
 // LOGIN SYSTEM
@@ -61,7 +67,36 @@ router.post('/register', (req, res) => {
             password2
         })
     } else {
-        res.send('pass');
+        // res.send('pass');
+        // validation passed
+        User.findOne({
+                email: email
+            })
+            .then(user => {
+                if (user) {
+                    //USER EXIST
+                    errors.push({
+                        msg: 'Email is already register'
+                    });
+                    res.render('register', {
+                        errors,  // SAME AS( ERRORS:ERRORS)
+                        name,
+                        email,
+                        password,
+                        password2
+                    });
+                } else {
+                    //CREATING NEW USER 
+                    const newUser = new User({
+                        name,
+                        email,
+                        password
+                    });
+                    console.log(newUser);
+                    res.send("hello");
+                }
+            })
+
     }
 
 
