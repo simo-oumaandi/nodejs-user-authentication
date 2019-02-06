@@ -2,6 +2,10 @@ const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const mongoose = require('mongoose');
 
+//THIS TWO ARE FOR SHOWING ALERT MESSAGE
+const flash = require('connect-flash');
+const session = require('express-session');
+
 
 const app = express();
 
@@ -35,6 +39,28 @@ app.set('view engine', 'ejs');
 
 //BODY PARSER
 app.use(express.urlencoded({extended: false})); //now we can get data from form 
+
+
+//EXPRESS SESSION
+app.use(session({
+  secret: 'secret',
+  resave: true,
+  saveUninitialized: true
+}));
+
+
+//CONNECT FLASH
+app.use(flash());
+
+
+//GLOBAL VARIABLES
+app.use((req, res, next)=>{
+    res.locals.success_msg = req.flash('success_msg');
+    res.locals.error_msg = req.flash('error_msg');
+    next();
+
+})
+
 
 
 //ROUTES
