@@ -70,7 +70,7 @@ router.post('/register', (req, res) => {
         // res.send('pass');
         // validation passed
         User.findOne({
-                email: email
+                email
             })
             .then(user => {
                 if (user) {
@@ -79,7 +79,7 @@ router.post('/register', (req, res) => {
                         msg: 'Email is already register'
                     });
                     res.render('register', {
-                        errors,  // SAME AS( ERRORS:ERRORS)
+                        errors, // SAME AS( ERRORS:ERRORS)
                         name,
                         email,
                         password,
@@ -88,19 +88,34 @@ router.post('/register', (req, res) => {
                 } else {
                     //CREATING NEW USER 
                     const newUser = new User({
-                        name,
+                        name, ///ACTUALLY WE ARE SETTING LIKE NAME:REQ.BODY.NAME
                         email,
                         password
                     });
-                    console.log(newUser);
-                    res.send("hello");
+                    // console.log(newUser);
+                    // res.send("hello");
+
+                    //HASH PASSWORD
+                    bcrypt.genSalt(10, (err, salt) => {
+                        bcrypt.hash(newUser.password, salt, (err, hash) => {
+                            if (err) throw err;
+                            //SET PASSWORD TO HASH
+                            newUser.password = hash;
+                            //SAVE USER
+                            newUser.save()
+                                .then(user => {
+                                    res.redirect('/users/login');
+                                })
+                                .catch(err => console.log(err))
+                        });
+                    });
                 }
-            })
+            });
 
     }
 
 
-})
+});
 
 
 module.exports = router;
