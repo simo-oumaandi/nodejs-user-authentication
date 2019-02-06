@@ -6,13 +6,13 @@ const router = express.Router();
 
 // LOGIN SYSTEM
 router.get('/login', (req, res)=>{
-    res.send("from user login");
+    res.render("login");
 });
 
 
 // REGISTER SYSTEM
 router.get('/register', (req, res)=>{
-    res.send("from user register");
+    res.render("register");
 });
 
 
