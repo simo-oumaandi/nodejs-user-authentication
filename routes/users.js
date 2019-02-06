@@ -16,4 +16,12 @@ router.get('/register', (req, res)=>{
 });
 
 
+
+// REGISTER HANDLE
+router.post('/register', (req, res)=>{
+    console.log(req.body);
+    res.send('hello');
+})
+
+
 module.exports = router;

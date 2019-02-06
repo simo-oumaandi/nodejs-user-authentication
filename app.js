@@ -27,10 +27,14 @@ mongoose.connection.once('open', function () {
 
 
 
-
+//EJS
 app.use(expressLayouts); //WE NEED TO MAKE SURE THIS LAYOUT IS ABOVE VIEW ENGINE EJS SETTING
 app.set('view engine', 'ejs');
 
+
+
+//BODY PARSER
+app.use(express.urlencoded({extended: false})); //now we can get data from form 
 
 
 //ROUTES
