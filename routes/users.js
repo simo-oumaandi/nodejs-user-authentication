@@ -39,7 +39,7 @@ router.post('/register', (req, res) => {
     //CHECK PASSWORD MATCH
     if (password != password2) {
         errors.push({
-            meg: "password didn't match"
+            msg: "password didn't match"
         });
     }
 
