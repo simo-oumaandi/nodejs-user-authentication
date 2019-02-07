@@ -1,6 +1,8 @@
+// https://www.youtube.com/watch?v=6FOq4cUdH8k&t=3949s
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const mongoose = require('mongoose');
+
 
 //THIS TWO ARE FOR SHOWING ALERT MESSAGE
 const flash = require('connect-flash');
