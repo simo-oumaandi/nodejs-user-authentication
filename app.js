@@ -4,10 +4,15 @@ const mongoose = require('mongoose');
 
 //THIS TWO ARE FOR SHOWING ALERT MESSAGE
 const flash = require('connect-flash');
+
 const session = require('express-session');
+const passport = require('passport');
 
 
 const app = express();
+
+//PASSPORT CONFIG
+require('./config/passport')(passport);
 
 // DB CONFIG
 const db = require('./config/keys').mongoLocalURI;
@@ -48,15 +53,20 @@ app.use(session({
   saveUninitialized: true
 }));
 
+//PASSPORT MIDDLEWARE WE MUSH KEEP IT BELOW THE EXPRESS SESSION
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 //CONNECT FLASH
 app.use(flash());
 
 
-//GLOBAL VARIABLES
+//CREATING GLOBAL VARIABLES
 app.use((req, res, next)=>{
     res.locals.success_msg = req.flash('success_msg');
     res.locals.error_msg = req.flash('error_msg');
+    res.locals.error = req.flash('error');
     next();
 
 })

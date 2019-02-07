@@ -5,6 +5,8 @@ const router = express.Router();
 //ENCRYPTING PASSWORD
 const bcrypt = require('bcryptjs');
 
+const passport = require('passport');
+
 
 //USER MODELS
 const User = require('../models/Users');
@@ -117,6 +119,25 @@ router.post('/register', (req, res) => {
 
 
 });
+
+
+//LOGIN HANDLE
+// get the help from doc custom callback http://www.passportjs.org/docs/authenticate/
+router.post('/login', (req, res, next) => {
+    //WE ARE USING LOCAL STRATEGY
+    passport.authenticate('local', {
+        successRedirect: '/dashboard',
+        failureRedirect: '/users/login',
+        failureFlash: true
+    })(req, res, next);
+});
+
+
+router.get('/logout', (req, res)=>{
+    req.logout();
+    req.flash('success_msg', "you are loged out");
+    res.redirect('/users/login');
+})
 
 
 module.exports = router;
