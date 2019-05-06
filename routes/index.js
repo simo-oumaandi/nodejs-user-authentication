@@ -1,20 +1,41 @@
-// HOME AND DASHBOARD BELONG HERE
+var express = require('express');
+var router = express.Router();
 
-const express = require('express');
-const router = express.Router();
+var loggedin = function (req, res, next) {
+  if (req.isAuthenticated()) {
+    next()
+  } else {
+    res.redirect('/login')
+  }
+}
 
-//BY USING THIS WE CAN'T NO LONGER ACCESS TO DASHBOARD WITHOUT LOGIN
-const {ensureAuthenticated} = require('../config/auth');
+/* GET home page. */
+router.get('/', function (req, res, next) {
+  res.render('index', {
+    title: 'Express'
+  });
+});
 
 
-router.get('/', (req, res)=>{
-    res.render('welcome');
+router.get('/login', function (req, res, next) {
+  res.render('login');
+});
+
+
+router.get('/signup', function (req, res, next) {
+  res.render('signup');
+});
+
+
+router.get('/profile', loggedin, function (req, res, next) {
+  res.render('profile', {
+    user: req.user
+  })
+});
+
+
+router.get('/logout', function (req, res) {
+  req.logout()
+  res.redirect('/')
 })
-router.get('/dashboard', ensureAuthenticated,  (req, res)=>{
-    res.render('dashboard', {
-        name: req.user.name
-    });
-})
-
-
 module.exports = router;

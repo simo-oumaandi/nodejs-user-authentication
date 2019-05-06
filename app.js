@@ -1,88 +1,75 @@
-// https://www.youtube.com/watch?v=6FOq4cUdH8k&t=3949s
-const express = require('express');
-const expressLayouts = require('express-ejs-layouts');
-const mongoose = require('mongoose');
+/**
+ * Thank you for viewing this tuorial.
+ * 
+ * Aman Kharbanda
+ * YouTube: https://bit.ly/2EudQ5Z
+ */
 
 
-//THIS TWO ARE FOR SHOWING ALERT MESSAGE
-const flash = require('connect-flash');
+var express = require('express');
+var path = require('path');
+var favicon = require('serve-favicon');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+var session = require('express-session');
+var passport = require('passport');
 
-const session = require('express-session');
-const passport = require('passport');
+require('./passport')(passport)
 
-
-const app = express();
-
-//PASSPORT CONFIG
-require('./config/passport')(passport);
-
-// DB CONFIG
-const db = require('./config/keys').mongoLocalURI;
-
-
-
-// mongoose.connect(db, {
-//         useNewUrlParser: true
-//     })
-//     .then(() => console.log("Mongo db is been connected"))
-//     .catch(err => console.log("Error with mongodb " + err));
+mongoose.connect('mongodb://localhost:27017/login')
 
 
 
-mongoose.connect(db); //IF TESTAROO DB IS ALREADY EXIST THEN OK. OR IF IT ISN'T IT WILL CREATE AUTOMATICLY
-mongoose.connection.once('open', function () {
-    console.log("Connection has been made now let's make fireaowks");
-}).on('error', function (error) {
-    console.log('Connection', error);
-});
+var index = require('./routes/index');
+var users = require('./routes/users');
+var auth = require('./routes/auth')(passport);
 
+var app = express();
 
-
-//EJS
-app.use(expressLayouts); //WE NEED TO MAKE SURE THIS LAYOUT IS ABOVE VIEW ENGINE EJS SETTING
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-
-
-//BODY PARSER
-app.use(express.urlencoded({extended: false})); //now we can get data from form 
-
-
-//EXPRESS SESSION
-app.use(session({
-  secret: 'secret',
-  resave: true,
-  saveUninitialized: true
+// uncomment after placing your favicon in /public
+//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: false
 }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  secret: 'thesecret',
+  saveUninitialized: false,
+  resave: false
+}))
 
-//PASSPORT MIDDLEWARE WE MUSH KEEP IT BELOW THE EXPRESS SESSION
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.initialize())
+app.use(passport.session())
 
+app.use('/', index);
+app.use('/users', users);
+app.use('/auth', auth)
 
-//CONNECT FLASH
-app.use(flash());
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
 
+// error handler
+app.use(function (err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-//CREATING GLOBAL VARIABLES
-app.use((req, res, next)=>{
-    res.locals.success_msg = req.flash('success_msg');
-    res.locals.error_msg = req.flash('error_msg');
-    res.locals.error = req.flash('error');
-    next();
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
+});
 
-})
-
-
-
-//ROUTES
-const indexRoutes = require('./routes/index');
-const usersRoutes = require('./routes/users');
-
-app.use('/', indexRoutes);
-app.use('/users', usersRoutes);
-
-
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, console.log(`app is running on http://localhost:${PORT}`));
+module.exports = app;
