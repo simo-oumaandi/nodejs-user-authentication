@@ -2,10 +2,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const passport = require(passport);
+
+const initializePassport = require('./passport');
 
 const app = express();
 
 
+initializePassport(passport)
 
 const users = [];
 
@@ -39,8 +43,16 @@ app.post('/register', async(req, res, next) => {
 
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        // console.log(Date.now().toString());
+        // console.log(req.body.name);
+        // console.log(req.body.email);
+        // console.log(hashedPassword);
+
+
+
+
         users.push({
-            id: Data.now().toString(),
+            id: Date.now().toString(),
             name: req.body.name,
             email: req.body.email,
             password: hashedPassword
