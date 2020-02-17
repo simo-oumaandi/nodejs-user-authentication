@@ -1,0 +1,30 @@
+{
+  "name": "authentication",
+  "version": "1.0.0",
+  "description": "https://github.com/MdSamsuzzohaShayon/nodejs-shoping-cart/blob/twelve/app.js",
+  "main": "index.js",
+  "dependencies": {
+    "bcrypt": "^3.0.8",
+    "body-parser": "^1.19.0",
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.1"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "nodemon": "^2.0.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MdSamsuzzohaShayon/nodejs-complete-authenticating.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MdSamsuzzohaShayon/nodejs-complete-authenticating/issues"
+  },
+  "homepage": "https://github.com/MdSamsuzzohaShayon/nodejs-complete-authenticating#readme"
+}

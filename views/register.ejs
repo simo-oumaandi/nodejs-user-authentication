@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NodeJS Auth - Register</title>
+    <link rel="stylesheet" href="/css/semantic.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <%- include('layout/header'); %>
+            <br>
+            <br>
+            <br>
+            <div class="ui container">
+                <h2 class="ui header massive green">Register</h2>
+                <br><br>
+                <form action="/register" method="POST" class="ui stackable form">
+                    <div class="ui two fields">
+                        <div class="field">
+                            <div class="ui labeled input">
+                                <label for="name" class="ui label "><div class="ui labeled input"><i class="icon user"></i></div></label>
+                                <input type="text" name="name" required>
+                            </div>
+
+                        </div>
+                        <div class="field">
+                            <div class="ui labeled input">
+                                <label for="email" class="ui label "><i class="icon envelope open"></i></label>
+                                <input type="email" name="email" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui two fields">
+                        <div class="field">
+                            <div class="ui labeled input">
+                                <label for="password" class="ui label "><i class="key icon"></i></label>
+                                <input type="password" name="password" required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui labeled input">
+                                <label for="password2" class="ui label "><i class="key icon"></i></label>
+                                <input type="password" name="password2" required>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="ui field fluid">
+                        <button class="ui green button fluid" type="submit">Register</button>
+                    </div>
+                </form>
+                <br><br>
+                <a href="/login">Login</a>
+            </div>
+
+
+    </div>
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/semantic.min.js"></script>
+</body>
+
+</html>
