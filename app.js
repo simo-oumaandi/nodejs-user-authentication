@@ -6,12 +6,15 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const passport = require('passport');
+const bodyParser = require('body-parser');
 
 
 
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+const authRouter = require('./routes/auth')(passport);
+
 
 const app = express();
 
@@ -38,6 +41,10 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+// parse application/json
+app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 // https://www.npmjs.com/package/express-session#reqsession
 // https://www.npmjs.com/package/express-session#example
@@ -45,12 +52,15 @@ app.use(session({
     secret: 'thesecret',
     resave: false,
     saveUninitialized: true
-}))
+}));
+
 
 
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/auth', authRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
