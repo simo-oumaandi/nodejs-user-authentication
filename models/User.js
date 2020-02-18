@@ -17,6 +17,11 @@ const userSchema = new Schema({
 });
 
 
+
+
+
+
+// WE ARE SAVING THIS TWO METHOD TO THE DATABASE
 // https://www.mongodb.com/blog/post/password-authentication-with-mongoose-part-1
 userSchema.methods.hashPassword = (password) => {
     // https://www.npmjs.com/package/bcrypt#to-hash-a-password-1

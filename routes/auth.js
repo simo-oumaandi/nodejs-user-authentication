@@ -31,6 +31,21 @@ module.exports = (passport) => {
             }
         })
     });
+
+
+    // THIS IS FOR SIGNIN
+    router.post('/signin',
+        passport.authenticate('local', {
+            successRedirect: '/profile',
+            failureRedirect: '/signin',
+            failureFlash: true
+        }),
+        (req, res, next) => {
+            res.send('hay');
+        }
+    );
+
+
     return router;
 }
 

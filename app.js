@@ -9,11 +9,13 @@ const passport = require('passport');
 const bodyParser = require('body-parser');
 
 
-
+// THIS IS FOR LOGIN
+require('./config/passport')(passport);
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const authRouter = require('./routes/auth')(passport);
+
 
 
 const app = express();
@@ -53,6 +55,10 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }));
+
+// THIS IS FOR LOGIN
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 
