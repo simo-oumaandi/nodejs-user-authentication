@@ -13,6 +13,18 @@
 
     <div class="wrapper">
         <%- include('layout/header'); %>
+
+            <br>
+            <br>
+            <br>
+            <div class="ui segment blue container">
+                <h2 class="ui header">
+                    <%= name %>
+                </h2>
+            </div>
+            <form action="/logout?_method=DELETE" class="ui form container stackable" method="POST">
+                <button type="submit" class="ui button green">Logout</button>
+            </form>
     </div>
 
     <script src="/js/jquery.min.js"></script>

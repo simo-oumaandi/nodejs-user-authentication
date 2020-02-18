@@ -17,30 +17,38 @@
             <br>
             <br>
             <div class="ui container">
-                <h2 class="ui header massive green">Register</h2>
-                <br><br>
-                <form action="/login" method="POST" class="ui stackable form">
-                    <div class="ui two fields">
-                        <div class="field">
-                            <div class="ui labeled input">
-                                <label for="email" class="ui label"><i class="inbox icon"></i></label>
-                                <input type="email" name="email" required placeholder="Email">
-                            </div>
-                        </div>
-                        <div class="field">
-                            <div class="ui labeled input">
-                                <label for="password" class="ui label"><i class="barcode icon"></i></label>
-                                <input type="password" name="password" required>
-                            </div>
+                <h2 class="ui header massive green">Login</h2>
+                <br>
 
-                        </div>
+                <% if(messages.error){ %>
+                    <div class="ui inverted segment red">
+                        <%= messages.error %>
                     </div>
-                    <div class="ui field fluid">
-                        <button class="ui green button fluid" type="submit">Login</button>
-                    </div>
-                </form>
-                <br><br>
-                <a href="/register">Login</a>
+
+                    <% } %>
+                        <br>
+                        <form action="/login" method="POST" class="ui stackable form">
+                            <div class="ui two fields">
+                                <div class="field">
+                                    <div class="ui labeled input">
+                                        <label for="email" class="ui label"><i class="inbox icon"></i></label>
+                                        <input type="email" name="email" required placeholder="Email">
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui labeled input">
+                                        <label for="password" class="ui label"><i class="barcode icon"></i></label>
+                                        <input type="password" name="password" required>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="ui field fluid">
+                                <button class="ui green button fluid" type="submit">Login</button>
+                            </div>
+                        </form>
+                        <br><br>
+                        <a href="/register">Login</a>
             </div>
 
 

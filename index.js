@@ -1,44 +1,68 @@
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config()
+}
+
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const passport = require(passport);
+const passport = require('passport');
+const flash = require('express-flash');
+const session = require('express-session');
+const methodOverride = require('method-override');
 
 const initializePassport = require('./passport');
 
 const app = express();
 
 
-initializePassport(passport)
+initializePassport(passport,
+    email => users.find(user => user.email === email),
+    id => users.find(user => user.id === id),
+)
 
 const users = [];
 
 
 // MIDDLEWARE
 app.set('view engine', 'ejs');
-app.use(express.static('public'));
 // app.use(express.urlencoded({ extended: false })); // THIS WILL ABLE TO ACCESS THE FORM INSIDE REQUEST
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(express.static('public'));
+app.use(flash());
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false, // IF NOTHING CHANGE SHOULD RESAVE ?
+    saveUninitialized: false // NO EMPTY VALUE IN SESSION
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(methodOverride('_method'));
+
+
 
 // ROUTES
-app.get('/', (req, res) => {
-    res.render('index.ejs');
+app.get('/', checkAuthenticated, (req, res) => {
+    res.render('index', { name: req.user.name });
 });
 
 
 
-app.get('/login', (req, res, next) => {
+app.get('/login', checkNotAuthenticated, (req, res, next) => {
     res.render('login');
 });
-app.post('/login', (req, res, next) => {
+app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/login',
+    failureFlash: true
+}));
 
-});
-
-app.get('/register', (req, res, next) => {
+app.get('/register', checkNotAuthenticated, (req, res, next) => {
     res.render('register');
 });
-app.post('/register', async(req, res, next) => {
+app.post('/register', checkNotAuthenticated, async(req, res, next) => {
     // console.log(req.body.name);
 
     try {
@@ -65,6 +89,31 @@ app.post('/register', async(req, res, next) => {
     console.log(users);
 
 });
+
+
+
+// LOG OUT
+app.delete('/logout', (req, res, next) => {
+    req.logOut(); // FROM PASSPORT
+    res.redirect('/login');
+})
+
+
+
+function checkAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect('/login');
+}
+
+
+function checkNotAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return res.redirect('/');
+    }
+    next();
+}
 
 
 
