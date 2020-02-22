@@ -6,6 +6,8 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const passport = require('passport');
+const flash = require('connect-flash');
 // const 
 
 
@@ -15,12 +17,13 @@ const usersRouter = require('./routes/users');
 
 const app = express();
 
-// view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'hbs');
+
+
+
 
 
 // DATABASE SETUP
+// https://mongoosejs.com/docs/connections.html
 mongoose.connect(keys.MongoURI, (err) => {
     console.log("Error: " + err);
 });
@@ -34,18 +37,22 @@ db.on('open', () => {
 
 
 // PASSPORT SIGN UP AND SIGN IN STRATEGY 
+// http://www.passportjs.org/docs/authenticate/
 require('./config/passport');
 
 
-app.engine('.hbs', exphbs({
-    defaultLayout: 'layout',
-    extname: '.hbs'
-}));
+// MIDDLEWARE
+// view engine setup
+// https://www.npmjs.com/package/express-handlebars
+app.engine('.hbs', exphbs({ extname: '.hbs' }));
 app.set('view engine', '.hbs');
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 // BODY PARSER
 // parse application/x-www-form-urlencoded
@@ -54,8 +61,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.session({ cookie: { maxAge: 60000 } }));
+app.use(flash());
 
+
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 // ROUTING
 app.use('/', indexRouter);
@@ -67,12 +79,12 @@ app.use('/users', usersRouter);
 
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
     next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next) => {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -82,4 +94,7 @@ app.use(function(err, req, res, next) {
     res.render('error');
 });
 
+
+
+// app.listen(3000);
 module.exports = app;
