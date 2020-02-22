@@ -1,3 +1,5 @@
+// http://www.passportjs.org/docs/authenticate/
+
 /*
 
 //MY CODE
@@ -140,6 +142,8 @@ passport.use('local.signup', new LocalStrategy({
             return done(null, false, req.flash('error', messages));
         }
         */
+        console.log(req.body);
+
         User.findOne({
                 'email': email
             },
@@ -154,8 +158,11 @@ passport.use('local.signup', new LocalStrategy({
                     });
                 }
                 let newUser = new User();
+                newUser.fname = req.body.fname;
+                newUser.lname = req.body.lname;
                 newUser.email = email;
                 // ENCRYPT PASSWORD METHODS IS COMING FROM USER MODELS
+                newUser.gender = req.body.gender;
                 newUser.password = password
 
                 //SAVING USER TO DATABASE
