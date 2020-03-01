@@ -1,4 +1,35 @@
-<br>
-<br>
-<br>
-<h2 class="ui header blue container">Welcome</h2>
+<div class="ui container">
+    <br>
+    <br>
+    <br>
+    <h2 class="ui header blue container">Welcome</h2>
+    {{!-- https://www.npmjs.com/package/express-handlebars --}}
+    {{#if message}}
+    {{!-- {{ message }} --}}
+    <table class="ui green tiny table">
+        <thead>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Gender</th>
+            <th>Password</th>
+        </thead>
+        <tbody>
+            {{#each message}}
+            <tr>
+                <td>{{ this.fname }}</td>
+                <td>{{ this.lname }}</td>
+                <td>{{ this.email }}</td>
+                <td>{{ this.gender }}</td>
+                <td>{{ this.password }}</td>
+            </tr>
+            {{/each}}
+
+        </tbody>
+    </table>
+    {{else}}
+    <div class="ui segment green">
+        There is not error
+    </div>
+    {{/if}}
+</div>

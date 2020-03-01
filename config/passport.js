@@ -1,86 +1,6 @@
-// http://www.passportjs.org/docs/authenticate/
-
-/*
-
-//MY CODE
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-const User = require('../models/User');
-
-
-
-
-//THIS WILL TELL THE PASSPORT HOW TO STORE USER IN THE SESSION
-passport.serializeUser((user, done) => {
-    done(null, user.id);
-});
-
-passport.deserializeUser((id, done) => {
-    User.findById(id, (err, user) => {
-        done(err, user);
-    });
-});
-
-
-
-
-
-// THIS WILL WORK AS CALL FUNCTION IN OUR ROUTE OF SIGNUP
-// http://www.passportjs.org/packages/passport-local/
-passport.use('local.signup', new LocalStrategy((req, email, password, done) => {
-    console.log("working sing up starategy", req.body);
-
-    // CHECK FOR USER IS ALREADY SAVED OR NOT
-    User.findOne({ 'email': email },
-        (err, user) => {
-            if (err) {
-                console.log("Error from finding db: ", err);
-            }
-            if (user) {
-                return done(null, false, console.log("the email is already in the database"));
-            }
-        }
-    );
-
-
-    // IF THE USER WITH UNIQUE MAIL ADDRESS THEN SAVE THAT USER
-    let newUser = new User()
-    newUser.fname = req.body.fname;
-    newUser.lname = req.body.lname;
-    newUser.email = req.body.email;
-    newUser.gender = req.body.gender;
-    newUser.password = req.body.password;
-
-    //SAVING USER TO DATABASE
-    newUser.save((err, result) => {
-        if (err) {
-            return done(err);
-        }
-        return done(null, newUser);
-    });
-
-
-
-
-
-}));
-
-
-
-*/
-
-
-
-
-
-
-
-
-
-// ACADEMIND CODE
-
 //SETUP PASSPORT AND STRATEGY
 const passport = require('passport');
+const { check, validationResult } = require('express-validator');
 const User = require('../models/User');
 const LocalStrategy = require('passport-local').Strategy;
 
@@ -127,23 +47,31 @@ passport.use('local.signup', new LocalStrategy({
     },
     //THIS FUNCTION WILL USE IN THE ROUTE METHOD AS CALLBACK
     (req, email, password, done) => {
-        /*
-        // VLIDATING WITH EXPRESS VALIDATOR
-        req.checkBody('email', 'Invalid Email').notEmpty().isEmail();
-        req.checkBody('password', 'Invalid password').notEmpty().isLength({
-            min: 4
-        });
-        let errors = req.validationErrors();
+
+        // CHECK FOR EMAIL ADDRESS
+        check('email', 'Invalid Email').notEmpty().isEmail();
+        check('password', 'Invalid Password').notEmpty().isLength({ min: 5 });
+        let errors = validationResult(req).array();
+
+
+
+
+        // STORING ALL ERRORS IN A ARRAY
+        // AND RETURN ALL ERROR
         if (errors) {
             let messages = [];
-            errors.forEach((error) => {
-                messages.push(error.msg);
+            errors.forEach(error => {
+                messages.push(error);
             });
             return done(null, false, req.flash('error', messages));
         }
-        */
-        console.log(req.body);
 
+
+
+
+        // CHECKING IF THERE IS THE USER WITH THE MAIL IS ALREADY EXIST OR NOT
+        // IF EXIST WE WILL RETURN WITH ERROR
+        // IF DOES NOT EXIST WE WILL CREATE A NEW USER
         User.findOne({
                 'email': email
             },
@@ -163,14 +91,19 @@ passport.use('local.signup', new LocalStrategy({
                 newUser.email = email;
                 // ENCRYPT PASSWORD METHODS IS COMING FROM USER MODELS
                 newUser.gender = req.body.gender;
-                newUser.password = password
+                newUser.password = password;
+
+
+                // FLASH MESSAGE: 
+                // https://github.com/jaredhanson/connect-flash
+                // req.flash('msg', 'adding user');
 
                 //SAVING USER TO DATABASE
                 newUser.save((err, result) => {
                     if (err) {
                         return done(err);
                     }
-                    return done(null, newUser);
+                    return done(null, newUser, req.flash('msg', 'added user'));
                 });
 
             }
