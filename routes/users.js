@@ -15,12 +15,13 @@ const User = require('../models/User');
 
 /* GET users listing. */
 router.get('/signup', function(req, res, next) {
-    let messages = req.flash('error');
+    // let messages = req.flash('error');
     res.render('users/signup', { messages });
 });
 
 router.get('/profile', (req, res, next) => {
-    res.render('users/profile', { messages });
+    // res.render('users/profile', { messages });
+    res.render('users/profile');
 });
 
 // const { fname, lname, email, gender, password, password2 } = req.body;

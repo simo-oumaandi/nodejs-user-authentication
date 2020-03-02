@@ -49,9 +49,9 @@ passport.use('local.signup', new LocalStrategy({
     (req, email, password, done) => {
 
         // CHECK FOR EMAIL ADDRESS
-        check('email', 'Invalid Email').notEmpty().isEmail();
-        check('password', 'Invalid Password').notEmpty().isLength({ min: 5 });
-        let errors = validationResult(req).array();
+        check(email, 'Invalid Email').notEmpty().isEmail();
+        check(password, 'Invalid Password').notEmpty().isLength({ min: 5 });
+        let errors = validationResult(req);
 
 
 
@@ -59,53 +59,65 @@ passport.use('local.signup', new LocalStrategy({
         // STORING ALL ERRORS IN A ARRAY
         // AND RETURN ALL ERROR
         if (errors) {
-            let messages = [];
-            errors.forEach(error => {
-                messages.push(error);
-            });
-            return done(null, false, req.flash('error', messages));
+            console.log('There are some error');
+
+            // let messages = [];
+            // errors.forEach(error => {
+            //     messages.push(error);
+            // });
+            // // return done(null, false, req.flash('error', messages));
+            return done(null, false, { message: "There are some error" });
+
+        } else {
+
+
+            // CHECKING IF THERE IS THE USER WITH THE MAIL IS ALREADY EXIST OR NOT
+            // IF EXIST WE WILL RETURN WITH ERROR
+            // IF DOES NOT EXIST WE WILL CREATE A NEW USER
+            User.findOne({
+                    'email': email
+                },
+                // CHECKING THE EMAIL IS ALREADY REGISTER OR NOT
+                (err, user) => {
+                    if (err) {
+                        return done(err);
+                    }
+                    if (user) {
+                        return done(null, false, {
+                            message: "Email is already in use"
+                        });
+                    }
+                    let newUser = new User();
+                    newUser.fname = req.body.fname;
+                    newUser.lname = req.body.lname;
+                    newUser.email = email;
+                    // ENCRYPT PASSWORD METHODS IS COMING FROM USER MODELS
+                    newUser.gender = req.body.gender;
+                    newUser.password = newUser.hashPassword(password);
+
+
+                    // FLASH MESSAGE: 
+                    // https://github.com/jaredhanson/connect-flash
+                    // req.flash('msg', 'adding user');
+
+                    if (req.body.password == req.body.password2) {
+                        //SAVING USER TO DATABASE
+                        newUser.save((err, result) => {
+                            if (err) {
+                                return done(err);
+                            }
+                            return done(null, newUser, req.flash('msg', 'added user'));
+                            // return done(null, newUser, req.flash('msg', 'added user'));
+                        });
+                    } else {
+                        console.log("password didn't match");
+                    }
+                }
+            );
         }
 
 
 
 
-        // CHECKING IF THERE IS THE USER WITH THE MAIL IS ALREADY EXIST OR NOT
-        // IF EXIST WE WILL RETURN WITH ERROR
-        // IF DOES NOT EXIST WE WILL CREATE A NEW USER
-        User.findOne({
-                'email': email
-            },
-            // CHECKING THE EMAIL IS ALREADY REGISTER OR NOT
-            (err, user) => {
-                if (err) {
-                    return done(err);
-                }
-                if (user) {
-                    return done(null, false, {
-                        message: "Email is already in use"
-                    });
-                }
-                let newUser = new User();
-                newUser.fname = req.body.fname;
-                newUser.lname = req.body.lname;
-                newUser.email = email;
-                // ENCRYPT PASSWORD METHODS IS COMING FROM USER MODELS
-                newUser.gender = req.body.gender;
-                newUser.password = password;
 
-
-                // FLASH MESSAGE: 
-                // https://github.com/jaredhanson/connect-flash
-                // req.flash('msg', 'adding user');
-
-                //SAVING USER TO DATABASE
-                newUser.save((err, result) => {
-                    if (err) {
-                        return done(err);
-                    }
-                    return done(null, newUser, req.flash('msg', 'added user'));
-                });
-
-            }
-        );
     }));
