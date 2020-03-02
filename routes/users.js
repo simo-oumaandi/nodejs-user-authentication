@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
+const { isSignin, isNotSignin } = require('../config/auth');
 
 
 
@@ -14,12 +15,13 @@ const User = require('../models/User');
 
 
 /* GET users listing. */
-router.get('/signup', function(req, res, next) {
+router.get('/signup', isNotSignin, (req, res, next) => {
     // let messages = req.flash('error');
-    res.render('users/signup', { messages });
+    // res.render('users/signup', { messages });
+    res.render('users/signup');
 });
 
-router.get('/profile', (req, res, next) => {
+router.get('/profile', isSignin, (req, res, next) => {
     // res.render('users/profile', { messages });
     res.render('users/profile');
 });
@@ -34,6 +36,11 @@ router.post('/signup', passport.authenticate('local.signup', {
     failureRedirect: '/users/signup',
     failureFlash: true
 }));
+
+
+
+
+
 
 /*
 // ERROR: WORK WITH CONNECT FLASH
@@ -101,9 +108,33 @@ router.post('/signup', (req, res, next) => {
 
 
 
-
-router.get('/signin', (req, res, next) => {
+/*
+router.get('/signin', isNotSignin, (req, res, next) => {
+    console.log("loging in from -> uiser.js -> signin get route, first callback ");
+    next();
+}, (req, res, next) => {
+    console.log("loging in from -> uiser.js -> signin get route, second callback ");
+    res.render('users/signin');
+});*/
+router.get('/signin', isNotSignin, (req, res, next) => {
+    console.log("loging in from -> uiser.js -> signin get route, second callback ");
     res.render('users/signin');
 });
+
+
+
+
+// LITTLE BIT PROBLEM WITH SIGN IN (COMPARING PASSWORD)
+router.post('/signin', passport.authenticate('local.signin', {
+    successRedirect: '/users/profile',
+    failureRedirect: '/users/signin',
+    failureFlash: true
+}));
+
+
+
+
+
+
 
 module.exports = router;

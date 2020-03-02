@@ -34,6 +34,7 @@ userSchema.methods.hashPassword = (password) => {
 
 
 userSchema.methods.comparePassword = (password, hash) => {
+    console.log("Password is comparing");
     return bcrypt.compareSync(password, hash);
 }
 
