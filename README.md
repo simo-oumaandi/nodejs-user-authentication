@@ -33,3 +33,13 @@
   - Get request from another server to get access token for single user
 
   ![All posts](server/img/postman-5.png)
+
+
+
+  - Delete refresh token
+
+  ![All posts](server/img/postman-6.png)
+
+  - Get access to token
+
+  ![All posts](server/img/postman-7.png)

@@ -32,6 +32,14 @@ app.post('/token', (req, res, next) => {
 
 
 
+//  DEAUTHORIZE AND DELETE TOKEN
+app.delete('/logout', (req, res, next)=>{
+    refreshTokens = refreshTokens.filter(token => token !== req.body.token);
+    res.sendStatus(204);
+});
+
+
+
 app.post('/login', (req, res, next) => {
     // AUTHENTICATE USER WITH PASSPORT
 
