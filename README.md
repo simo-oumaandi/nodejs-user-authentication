@@ -32,4 +32,4 @@
 
   - Get request from another server to get access token for single user
 
-  ![All posts](server/img/postman-2.png)
+  ![All posts](server/img/postman-5.png)
