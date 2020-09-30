@@ -54,4 +54,4 @@ function authenticateToken(req, res, next){
 }
 
 
-app.listen(4000, ()=>console.log("server is running on localhost:4000"));
+app.listen(3000, ()=>console.log("server is running on localhost:3000"));

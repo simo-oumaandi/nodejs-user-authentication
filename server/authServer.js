@@ -11,7 +11,7 @@ app.use(express.json());
 
 
 
-let refreshToken = [];
+let refreshTokens = [];
 
 // CREATE NEW TOKEN SINCE OUR LOGIN TOKEN IS EXPIRE IN 15 SECOND
 app.post('/token', (req, res, next) => {
@@ -43,7 +43,7 @@ app.post('/login', (req, res, next) => {
     // const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
     const accessToken = generateAccessToken(user);
     const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
-    refreshToken.push(refreshToken);
+    refreshTokens.push(refreshToken);
     // WE CAN ACCESS ANY USER WITH THIS ACCESS TOKEN
     res.json({ accessToken: accessToken, refreshToken: refreshToken });
 
@@ -89,7 +89,7 @@ function authenticateToken(req, res, next){
 function generateAccessToken(user) {
     // Sign asynchronously
     // IN REAL APPLICATION THIS SHOULD EXPIRES IN 15 MINUTES
-    return accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15s' });
+    return accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '50s' });
 
 
 }
@@ -126,4 +126,4 @@ function generateAccessToken(user) {
 
 
 
-app.listen(3000, () => console.log("server is running on localhost:3000"));
+app.listen(4000, () => console.log("server is running on localhost:4000"));
