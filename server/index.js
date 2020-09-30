@@ -26,19 +26,7 @@ app.get('/posts',authenticateToken, (req, res, next)=>{
 });
 
 
-app.post('/login', (req, res, next)=>{
-    // AUTHENTICATE USER WITH PASSPORT
 
-    // THIS USER SHOULD COME FROM PASSPORT AUTH
-    const username = req.body.username;
-    // CREATING USER OBJECT
-    const user = {name: username};
-    // Sign asynchronously
-    const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
-    // WE CAN ACCESS ANY USER WITH THIS ACCESS TOKEN
-    res.json({accessToken: accessToken});
-
-});
 
 
 

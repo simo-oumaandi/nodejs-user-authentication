@@ -1,0 +1,4 @@
+client/node_modules
+  - Get request for all post
+
+  ![All posts](server/img/postman-1.png)
