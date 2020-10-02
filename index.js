@@ -1,57 +1,20 @@
-require('dotenv').config();
-const express =require('express');
+const express = require('express');
+const mongoose = require('mongoose');
 const app = express();
 
-
-const jwt = require('jsonwebtoken');
-
+require('dotenv').config();
 
 
-app.use(express.json());
+app.use(express.static('public'));
+app.set("view engine", "ejs");
 
-const posts = [
-    {
-        username: "Cristiano",
-        title: "Juventus"
-    },
-    {
-        username: "Messi",
-        title: "Barcelona"
-    },
-]
+const mongoURI = process.env.mongoURI;
 
-
-app.get('/posts',authenticateToken, (req, res, next)=>{
-    res.json(posts.filter(post=>post.username === req.user.name));
-});
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(result => console.log("Mongodb is connected "))
+    .catch(err => console.log(err));
 
 
 
-
-
-
-
-// GET TOKEN -> VARIFY USER -> RETURN USER TO ROUTE
-function authenticateToken(req, res, next){
-    // GET TOKEN FROM HEADER
-    const authHeader = req.headers['authorization']
-    // IF WE HAVE A AUTH HEADER THEN RETURN AUTH HEADER TOKEN
-    const token = authHeader && authHeader.split(' ')[1];
-    if(token == null) {
-        return res.sendStatus(401);
-    }
-
-    // VARIFY TOKEN
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user)=>{
-        // WE HAVE A TOKEN BUT THE TOKEN IS NO LONGER VALID SO YOU NOT HAVE THE ACCESS
-        if(err) return res.sendStatus(403);
-        
-
-        // SO WE HAVE VALID TOKEN
-        req.user = user;
-        next();
-    });
-}
-
-
-app.listen(3000, ()=>console.log("server is running on localhost:3000"));
+const PORT = process.env.PORT || 6000;
+app.listen(PORT, () => console.log("Server is running on port : " + PORT))
