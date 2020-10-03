@@ -1,11 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const authRoute = require('./routes/authRoute');
+
 const app = express();
 
 require('dotenv').config();
 
 
 app.use(express.static('public'));
+app.use(express.json());
 app.set("view engine", "ejs");
 
 const mongoURI = process.env.mongoURI;
@@ -17,10 +20,10 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
 
 
 // ROUTE
+
 app.get('/', (req, res, next) => { res.render('home.ejs'); });
 app.get('/players', (req, res, next) => { res.render('players') });
-
-
+app.use('/', authRoute);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log("Server is running on port : " + PORT))

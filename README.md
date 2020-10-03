@@ -1,6 +1,6 @@
 # JWT Authentication
 
-[Tutorial](https://www.youtube.com/watch?v=mbsmsi7l3r4)
+[Tutorial](https://www.youtube.com/watch?v=SnoAwLP1a-0&list=PL4cUxeGkcC9iqqESP8335DA5cRFp8loyp&index=1)
 
 ### Creating random bytes as hex
 
