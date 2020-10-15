@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const authRoute = require('./routes/authRoute');
+const {requireAuth} = require("./middleware/authMiddleware");
 
 const app = express();
 
@@ -23,7 +24,7 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
 // ROUTE
 
 app.get('/', (req, res, next) => { res.render('home.ejs'); });
-app.get('/players', (req, res, next) => { res.render('players') });
+app.get('/players', requireAuth, (req, res, next) => { res.render('players') });
 app.use('/', authRoute);
 
 
