@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 
@@ -28,6 +29,24 @@ const handleErrors = (err ) =>{
 }
 
 
+
+
+
+
+
+
+
+
+
+// CREATE TOKEN
+const maxAge = 3 * 24 *60 * 60; // 3 days in mili seconds
+const createToken = (id) =>{
+    return jwt.sign({id}, process.env.SECRETKEY, {
+        expiresIn: maxAge
+    });
+}
+
+
 module.exports.signup_get = (req, res, next) => {
     res.render('signup');
 }
@@ -45,7 +64,11 @@ module.exports.signup_post = async (req, res, next) => {
     try {
         // https://mongoosejs.com/docs/api/document.html#document_Document-directModifiedPaths
         const user = await User.create({ email, password });
-        res.status(201).json(user);
+        // CREATING JWT TOKEN
+        const token = createToken(user._id);
+        // PLACE TOKEN IN COOKIE AND RETURN IT
+        res.cookie('jwt', token, {httpOnly: true, maxAge:maxAge*1000})
+        res.status(201).json({user: user._id});
     } catch (err) {
         const errors = handleErrors(err);
         res.status(400).json({errors})

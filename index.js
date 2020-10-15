@@ -27,6 +27,13 @@ app.get('/players', (req, res, next) => { res.render('players') });
 app.use('/', authRoute);
 
 
+
+
+
+
+
+/*
+// USING COOKIES
 // https://expressjs.com/en/api.html#setHeaders
 app.get('/set-cookies', (req, res, next)=>{
     // res.setHeader('Set-Cookie', 'newUser=true');
@@ -44,6 +51,10 @@ app.get('/read-cookies', (req, res, next)=>{
     console.log(cookies.newUser);
     res.json(cookies);
 });
+
+*/
+
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log("Server is running on port : " + PORT))
