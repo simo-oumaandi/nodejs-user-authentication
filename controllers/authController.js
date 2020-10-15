@@ -4,13 +4,27 @@ const User = require('../models/User');
 // HANDLE ERRORS
 const handleErrors = (err ) =>{
     console.log(err.message, err.code);
-    let error = {email: '', password: ''};
+    let errors = {email: '', password: ''};
+
+
+    // DUBLICATE ERROR CODE
+    if(err.code === 11000){
+        errors.email = "This email is already registered";
+        return errors;
+    }
 
 
     // VALIDATION ERRORS
     if (err.message.includes("user validation failed: email")){
-        console.log(err);
+        // LOG OUT ARRAY OR ERROR
+        // console.log(Object.values(err.errors));
+        Object.values(err.errors).forEach(({properties})=>{
+            // console.log(properties);
+            errors[properties.path] = properties.message;
+        })
     }
+
+    return errors;
 }
 
 
@@ -34,7 +48,7 @@ module.exports.signup_post = async (req, res, next) => {
         res.status(201).json(user);
     } catch (err) {
         const errors = handleErrors(err);
-        res.status(400).send("error, user is not created")
+        res.status(400).json({errors})
     }
 }
 
