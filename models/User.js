@@ -46,5 +46,28 @@ userSchema.pre('save', async function (next){
 });
 
 
+
+// STATIC METHOD TO LOGIN USER
+// https://mongoosejs.com/docs/2.7.x/docs/methods-statics.html
+userSchema.statics.login = async function (email, password) {
+    console.log("login  from user js");
+    // FINDING USER FROM DATABASE
+    const user = await this.findOne({email});
+    // IF WE FOUND THE USER IT WILL MATCH THE PASSWORD
+    console.log(`User from User.js :  ${user}`);
+    if(user){
+        const auth = await bcrypt.compare(password, user.password);
+        // IF PASSWORD DOES MATCH IT WILL RETURN THE USER
+        if(auth){
+            return user;
+        }
+        // IF PASSWORD DIDN'T MATCH
+        throw Error("incorrect password");
+    }
+    // IF EMAIL IS NOT FOUND
+    throw Error("incorrect email");
+}
+
+
 const User  = mongoose.model('user', userSchema);
 module.exports = User;

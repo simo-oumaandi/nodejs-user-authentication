@@ -1,26 +1,4 @@
-<%- include('partials/header'); %>
-<div class="ui container">
-    <h2 class="ui header green aligned center">Log In</h2>
-    <form class="ui form">
-        <div class="two fields">
-            <div class="field">
-                <label for="email" class="ui header green">Email</label>
-                <input type="text" name="email" required>
-            </div>
-            <div class="field">
-                <label for="password" class="ui header green">Password</label>
-                <input type="password" name="password" required>
-            </div>
-        </div>
-        <div class="field">
-            <button class="ui button green fluid">Submit</button>
-        </div>
-    </form>
-</div>
-
-
-<script>
-    const form = document.querySelector("form");
+const form = document.querySelector("form");
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -76,7 +54,3 @@
             console.log(err);
         }
     });
-
-
-</script>
-<%- include('partials/footer'); %>

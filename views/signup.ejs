@@ -25,14 +25,14 @@
     // const emailError = document.querySelector(".ui.email");
     // const passwordError = document.querySelector(".ui.password");
 
-    console.log(passwordError.attributes);
+    // console.log(passwordError.attributes);
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
 
-        // RESET ERRORS
-        emailError.textContent = '';
-        passwordError.textContent = '';
+        // // RESET ERRORS
+        // emailError.textContent = '';
+        // passwordError.textContent = '';
 
         // GET VALUES
         const email = form.email.value;
@@ -46,21 +46,34 @@
                 headers: { "Content-Type": "application/json" }
             });
             const data = await res.json();
+            console.log("sign up fire");
             console.log(data);
             // SHOWING ERROR MESSAGES
             if (data.errors) {
-                let emailErrDiv = document.createElement('div');
-                emailErrDiv.setAttribute('class', 'ui message red');
-                emailErrDiv.textContent = data.errors.email;
-                form.appendChild(emailErrDiv);
+                console.log("it has some error");
+                console.log(data.errors);
+                if (data.errors.email) {
+                    console.log("email error");
+                    let emailErrDiv = document.createElement('div');
+                    emailErrDiv.setAttribute('class', 'ui message red');
+                    emailErrDiv.textContent = data.errors.email;
+                    form.appendChild(emailErrDiv);
+                    setTimeout(() => {
+                        form.removeChild(emailErrDiv);
+                    }, 3000);
+                }
+                if (data.errors.password) {
+                    console.log("Password errror");
+                    let passwordErrDiv = document.createElement('div');
+                    passwordErrDiv.setAttribute('class', 'ui message red');
+                    passwordErrDiv.textContent = data.errors.password;
 
+                    form.appendChild(passwordErrDiv);
+                    setTimeout(() => {
+                        form.removeChild(passwordErrDiv);
+                    }, 3000);
+                }
 
-                let passwordErrDiv = document.createElement('div');
-                passwordErrDiv.setAttribute('class', 'ui message red');
-                passwordErrDiv.textContent = data.errors.password;
-
-                // errDiv.appendChild(document.createTextNode("Errors: " + {data.errors.email} + " <br> Errors: ${data.errors.password}"));
-                form.appendChild(passwordErrDiv);
 
 
                 // emailError.textContent = data.errors.email;
