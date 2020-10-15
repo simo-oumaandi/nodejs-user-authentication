@@ -16,11 +16,30 @@
         <div class="ui stackable menu">
             <div class="ui container">
                 <li class="item"><a href="/"><img width="30px" src="img/athlete.svg" alt=""></a> </li>
-                <li class="item"><a href="/signup" class="ui green mini button">Sign Up</a></li>
-                <li class="item"><a href="/login" class="ui green mini button">Log In</a></li>
+
+                <% if(user){ %>
                 <div class="right menu">
                     <li class="item"><a href="/logout" class="ui red mini button">Log Out</a></li>
                     <li class="item"><a href="/players" class="ui large button purple">View players</a></li>
                 </div>
+                <% }else{ %>
+                <li class="item"><a href="/signup" class="ui green mini button">Sign Up</a></li>
+                <li class="item"><a href="/login" class="ui green mini button">Log In</a></li>
+                <% } %>
             </div>
         </div>
+
+        <% if(user){ %>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="ui container">
+            <div class="ui segment">
+                <h3 class="ui header aligned center"> Welcome <%- user.email %></h3>
+            </div>
+
+        </div>
+
+        <% } %>

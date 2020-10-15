@@ -1,3 +1,4 @@
+const User = require('../models/User');
 const jwt = require("jsonwebtoken");
 
 // PROTECTING ROUTE
@@ -26,4 +27,34 @@ const requireAuth = (req, res, next) => {
 }
 
 
-module.exports = {requireAuth};
+
+const checkUser = (req, res, next) => {
+    const token = req.cookies.jwt;
+    if (token) {
+        jwt.verify(token, process.env.SECRETKEY, async (err, decoredToken) => {
+            if (err) {
+                console.log(err.message);
+                // IF USER IS NOT LOGGED IN THIS WOULD BE NULL
+                res.locals.user = null;
+                next();
+            } else {
+                // IF THERE IS A VALID USER LOGGED IN 
+                console.log("Decoded token", decoredToken);
+                // FIND THE USER
+                let user = await User.findById(decoredToken.id);
+                // http://expressjs.com/en/api.html#app.locals
+                // http://expressjs.com/en/5x/api.html#res.locals
+                // IF USER IS LOGGED IN THIS WOULD BE CURRENT USER
+                // NOW WE CAN ACCESS USER PROPERTIES INSIDE OUR VIEWS FILE
+                res.locals.user = user;
+                next();
+            }
+        });
+    } else {
+        res.locals.user = null;
+        next();
+    }
+}
+
+
+module.exports = { requireAuth, checkUser };
