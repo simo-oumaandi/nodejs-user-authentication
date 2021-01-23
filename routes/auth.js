@@ -6,7 +6,7 @@ const {signup, activate} = require('../controllers/auth');
 
 
 router.post('/signup', signup);
-router.get('/activate',activate);
+router.post('/activate',activate);
 
 
 module.exports = router;
