@@ -29,11 +29,15 @@ passport.use('local', new LocalStrategy({
 
         // 2) Check if the password is correct
         const isValid = User.comparePasswords(password, user.password);
-        if (isValid) {
-            return done(null, user);
-        } else {
+        if(!isValid){
             return done(null, false, { message: 'Unknown Password' });
         }
+
+        // CHECK IF THE ACCOUNT IS VERIFIED 
+        if(!user.active){
+            return done(null, false, { message: 'You need to verify email first ' });
+        }
+        return done(null, user);
     } catch(error) {
         return done(error, false);
     }

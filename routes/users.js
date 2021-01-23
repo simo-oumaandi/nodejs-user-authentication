@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Joi = require('joi');
 const passport = require('passport');
+const mailer = require('../misc/mailer');
+const randomstring = require('randomstring');
 
 const User = require('../models/user');
 
@@ -56,20 +58,48 @@ router.route('/register')
       // Hash the password
       const hash = await User.hashPassword(result.value.password);
 
+
+      // GENERATE SECRET TOKEN 
+      const secretToken = randomstring.generate();
+      // ASSIGNING IT TO THE VARIABLE 
+      result.value.secretToken = secretToken;
+      // FLAG THE ACCOUNT AS INACTIVE 
+      result.value.active = false;
+
+
+
+
       // Save user to DB
       delete result.value.confirmationPassword;
       result.value.password = hash;
 
-      const newUser = await new User(result.value); 
+      const newUser = await new User(result.value);
       console.log('newUser', newUser);
       await newUser.save();
 
-      req.flash('success', 'Now you may login.');
+
+      // COMPOSE AN EMAIL 
+      const html = `
+        <h2>Hi there,</h2>
+        <p>Please veryfy email with this token</p>
+        Token: <b>${secretToken}</b>
+        <a href="http://localhost:4000/users/verify">Activate</a>
+      `;
+
+      await mailer.sendEmail('mdshayon0@gmail.com', result.value.email, 'Please verify your email', html);
+
+      req.flash('success', 'Please check your email.');
       res.redirect('/users/login');
-    } catch(error) {
+    } catch (error) {
       next(error);
     }
   });
+
+
+
+
+
+
 
 router.route('/login')
   .get(isNotAuthenticated, (req, res) => {
@@ -81,6 +111,10 @@ router.route('/login')
     failureFlash: true
   }));
 
+
+
+
+
 router.route('/dashboard')
   .get(isAuthenticated, (req, res) => {
     res.render('dashboard', {
@@ -88,11 +122,46 @@ router.route('/dashboard')
     });
   });
 
+
+
+
+router.route('/verify')
+  .get(isNotAuthenticated, (req, res, next) => {
+    res.render('verify');
+  })
+  .post(async (req, res, next) => {
+    try {
+      const { secretToken } = req.body;
+
+      // FIND THE TOKEN THAT MATCHES SECRET TOKEN 
+      const user = await User.findOne({ 'secretToken': secretToken });
+      if (!user) {
+        req.flash("error", "No user found");
+        res.redirect('/users/verify');
+        return;
+      }
+      user.active = true;
+      user.secretToken = '';
+      await user.save();
+      req.flash('success', "You now may login");
+      res.redirect('/users/login');
+    } catch (error) {
+      next(error);
+    }
+  });
+
+
+
+
 router.route('/logout')
   .get(isAuthenticated, (req, res) => {
     req.logout();
     req.flash('success', 'Successfully logged out. Hope to see you soon!');
     res.redirect('/');
   });
+
+
+
+
 
 module.exports = router;
