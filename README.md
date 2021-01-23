@@ -13,3 +13,11 @@
   ![Mail gun](screenshots/mg-5.png)
 
   ![Mail gun](screenshots/mg-4.png)
+
+ - All requests from postman
+
+  ![Mail gun](screenshots/pm-1.png)
+
+  ![Mail gun](screenshots/pm-2.png)
+
+  ![Mail gun](screenshots/pm-3.png)
