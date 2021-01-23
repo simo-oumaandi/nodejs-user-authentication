@@ -6,6 +6,7 @@
     "express-jwt": "^6.0.0",
     "express-validator": "^6.9.2",
     "jsonwebtoken": "^8.5.1",
+    "mailgun-js": "^0.22.0",
     "mongoose": "^5.11.12"
   },
   "name": "email-verification-auth",
