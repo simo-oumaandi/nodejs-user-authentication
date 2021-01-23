@@ -13,7 +13,7 @@ const passport = require('passport');
 require('./config/passport');
 
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.DB_URI);
+mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const app = express();
 app.use(morgan('dev'));
