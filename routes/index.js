@@ -4,13 +4,15 @@ const router = express();
 
 
 router.get('/', (req, res, next) => {
-    res.status(200).json({ request: 'Login' });
+    res.render('login', {
+        layout: 'login'
+    } );
 });
 
 
 
 router.get('/dashboard', (req, res, next) => {
-    res.status(200).json({ request: 'Dashboard' });
+    res.render('dashboard' );
 });
 
 
