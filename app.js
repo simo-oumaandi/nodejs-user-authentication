@@ -1,9 +1,11 @@
 const path = require('path');
 const express = require('express');
+const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const passport = require('passport');
 const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 const exphbs = require('express-handlebars');
 
 // LOAD CONFIG 
@@ -32,6 +34,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     // cookie: { secure: true } // THIS WON'T WORK WITHOUT HTTPS
+    store: new MongoStore({mongooseConnection: mongoose.connection})
 }));
 // PASSPORT MIDDLEWARE 
 app.use(passport.initialize());
