@@ -10,7 +10,7 @@ router.get('/google', passport.authenticate('google', { scope: ['profile'] }));
 
 // CALLBACK
 router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res, next) => {
-    res.redirect('/dashboard');
+    res.redirect('/dashboard', );
 });
 
 
