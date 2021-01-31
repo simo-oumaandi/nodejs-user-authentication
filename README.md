@@ -11,3 +11,24 @@
  ```
 npm install -D nodemon cross-env
  ```
+
+ - Enable **Google+ API** from [here](https://console.cloud.google.com/apis/api/plus.googleapis.com/overview?project=neon-radius-300702)
+
+    ![google oauth](screenshots/oauth-1.png)
+
+ - To view all credentials or create new credentials visit [Credentials in APIs & Services}(https://console.cloud.google.com/apis/api/plus.googleapis.com/credentials?project=neon-radius-300702)
+
+    ![google oauth](screenshots/oauth-2.png)
+
+ - Create OAuth consent screen -> Make everything default
+
+    ![google oauth](screenshots/oauth-3.png)
+
+    ![google oauth](screenshots/oauth-4.png)
+
+ - Create credentials -> oauth client id -> [know more](https://developers.google.com/identity/protocols/oauth2/web-server)
+
+    ![google oauth](screenshots/oauth-8.png)
+
+ - **URIs** will be __http://localhost:3000/auth/google/callback__
+ - 
