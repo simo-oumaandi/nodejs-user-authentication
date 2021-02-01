@@ -14,9 +14,10 @@ router.get('/', ensureGuest, (req, res, next) => {
 
 
 router.get('/dashboard', ensureAuth, async (req, res, next) => {
-    console.log(req.user);
+    console.log("User: ", req.user._id);
     try {
         const stories = await Story.find({ user: req.user.id }).lean(); // PLAIN JS OBJECT, NOT MONGOOSE DOCUMENT
+        console.log("Stories: ",stories);
         res.render('dashboard', {
             name: req.user.firstName,
             stories

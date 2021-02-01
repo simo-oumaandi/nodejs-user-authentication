@@ -31,4 +31,4 @@ npm install -D nodemon cross-env
     ![google oauth](screenshots/oauth-8.png)
 
  - **URIs** will be __http://localhost:3000/auth/google/callback__
- - 
+ - Learn using custom error page (404, 500)
