@@ -32,3 +32,4 @@ npm install -D nodemon cross-env
 
  - **URIs** will be __http://localhost:3000/auth/google/callback__
  - Learn using custom error page (404, 500)
+ - Using hbs helpers functions 

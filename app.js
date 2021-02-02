@@ -23,7 +23,7 @@ require('./config/passport')(passport);
 connectDB();
 const app = express();
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 
 
 if (process.env.NODE_ENV === "development") {
@@ -31,10 +31,10 @@ if (process.env.NODE_ENV === "development") {
 }
 
 
-const {formatDate, stripTags, truncate} =require('./helpers/hbs');
+const { formatDate, stripTags, truncate, editIcon } = require('./helpers/hbs');
 
 
-app.engine('.hbs', exphbs({ helpers: {formatDate, stripTags, truncate}, defaultLayout: 'main', extname: '.hbs' }));
+app.engine('.hbs', exphbs({ helpers: { formatDate, stripTags, truncate, editIcon }, defaultLayout: 'main', extname: '.hbs' }));
 app.set('view engine', '.hbs');
 
 // SESSION MIDDLEWARE 
@@ -43,11 +43,18 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     // cookie: { secure: true } // THIS WON'T WORK WITHOUT HTTPS
-    store: new MongoStore({mongooseConnection: mongoose.connection})
+    store: new MongoStore({ mongooseConnection: mongoose.connection })
 }));
 // PASSPORT MIDDLEWARE 
 app.use(passport.initialize());
 app.use(passport.session());
+
+
+// SET GLOBAL VARIABLES 
+app.use((req, res, next) => {
+    res.locals.user = req.user || null;
+    next();
+});
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', require('./routes/index'));
