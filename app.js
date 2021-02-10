@@ -88,7 +88,7 @@ app.use('/', indexRoute);
 app.use('/auth', userRoute);
 
 //We plugin our jwt strategy as a middleware so only verified users can access this route
-app.use('/user', passport.authenticate('jwt', { session : false }), secureRoute );
+// app.use('/user', passport.authenticate('jwt', { session : false }), secureRoute );
 
 
 

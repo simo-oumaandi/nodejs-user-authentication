@@ -15,14 +15,14 @@ router.get('/register', ensureGuest, (req, res, next) => {
 
 
 router.post('/register', async (req, res, next) => {
-    console.log(req.body);
+    // console.log(req.body);
     const { name, email, password, password2 } = req.body;
     const userExist = await User.findOne({ email });
     if (userExist) {
         return res.json({ "message": "user with this email is already exist" });
     }
     const newUser = await User.create({ name, email, password });
-    console.log(newUser);
+    // console.log(newUser);
     res.redirect('/auth/login');
     // res.status(200).json({ request: req.body });
 });
@@ -72,35 +72,11 @@ router.post('/login', async (req, res, next) => {
 
 
 // SIGN THE TOKEN IN HERE ->
-router.get('/profile', (req, res, next) => {
-
-    // USE PASSPORT.AUTHENTICATE TO AUTHENTICATE USER FOR EVERY ROUTE 
-    passport.authenticate('jwt', { session: false }, (err, user, info) => {
-        console.log("User from passport ", user);
-        user = req.body.email;
-        if (err || !user) {
-            return res.status(400).json({
-                // message: info ? info.message : 'Login failed',
-                message: 'Login failed',
-                user: user
-            });
-        }
-
-        req.login(user, { session: false }, (err) => {
-            if (err) {
-                res.send(err);
-            }
-
-            // jwt.sign({ foo: 'bar' }, 'shhhhh');
-
-            const token = jwt.sign({ jwt: 'this_is_my_token' }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
-            return res.json({ user, token });
-        });
-    })
-        (req, res, next);
-
-});
+app.post('/profile', passport.authenticate('jwt', { session: false }),
+    function(req, res) {
+        res.send(req.user.profile);
+    }
+);
 
 
 
