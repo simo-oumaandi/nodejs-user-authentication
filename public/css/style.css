@@ -1,0 +1,10 @@
+body{
+    background: rgb(196, 196, 247);
+    /* color: rgb(116, 114, 253); */
+}
+
+.msg{
+    padding: 10px 50px; 
+    background-color: cadetblue; 
+    color: crimson;
+}
