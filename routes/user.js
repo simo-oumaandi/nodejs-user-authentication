@@ -2,7 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
-const { ensureGuest } = require('../middleware/auth');
+const {ensureAuth, ensureGuest } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -26,6 +26,21 @@ router.post('/register', async (req, res, next) => {
     res.redirect('/auth/login');
     // res.status(200).json({ request: req.body });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 router.get('/login', ensureGuest, (req, res, next) => {
@@ -72,11 +87,19 @@ router.post('/login', async (req, res, next) => {
 
 
 // SIGN THE TOKEN IN HERE ->
-app.post('/profile', passport.authenticate('jwt', { session: false }),
-    function(req, res) {
-        res.send(req.user.profile);
-    }
-);
+
+
+
+// router.get('/profile', ensureAuth,
+//     function(req, res) {
+//         res.send(req.user);
+//     }
+// );
+// router.get('/profile', passport.authenticate('jwt', { session: false }),
+//     function(req, res) {
+//         res.send(req.user);
+//     }
+// );
 
 
 
