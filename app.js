@@ -9,7 +9,7 @@ const cookieParser = require('cookie-parser');
 const expressLayouts = require('express-ejs-layouts');
 const indexRoute = require('./routes/index');
 const userRoute = require('./routes/user');
-const secureRoute = require('./routes/secure');
+// const secureRoute = require('./routes/secure');
 
 
 
@@ -66,10 +66,14 @@ app.use(cookieParser());
 // app.use(passport.session());
 
 
-app.use((req, res, next)=>{
-    if(req.isAuthenticated){
+app.use( async (req, res, next)=>{
+
+    const token = await req.cookies.jwt;
+    // console.log("Token to redirect: ",token);
+    if(token){
         console.log("Now we can set global variable");
-        res.locals.user = req.user;
+        res.locals.user = "req.user.name";
+        console.log("User Info: ",req.user);
         next();
     }else{
         console.log("Now we can not set global variable");

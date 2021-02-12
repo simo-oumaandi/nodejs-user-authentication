@@ -43,7 +43,7 @@ router.post('/register', async (req, res, next) => {
 
 
 
-router.get('/login', ensureGuest, (req, res, next) => {
+router.get('/login', (req, res, next) => {
     res.render('login', {msg: null});
 });
 
@@ -89,17 +89,11 @@ router.post('/login', async (req, res, next) => {
 // SIGN THE TOKEN IN HERE ->
 
 
-
-// router.get('/profile', ensureAuth,
-//     function(req, res) {
-//         res.send(req.user);
-//     }
-// );
-// router.get('/profile', passport.authenticate('jwt', { session: false }),
-//     function(req, res) {
-//         res.send(req.user);
-//     }
-// );
+router.get('/profile', passport.authenticate('jwt', { session: false }),
+    function(req, res) {
+        res.send(req.user);
+    }
+);
 
 
 
@@ -114,7 +108,7 @@ router.post('/login', async (req, res, next) => {
 
 
 router.get('/logout', (req, res, next) => {
-    req.logout();
+    res.cookie('jwt', '');
     res.redirect('/auth');
 });
 
