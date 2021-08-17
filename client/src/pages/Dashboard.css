@@ -1,0 +1,10 @@
+.dashboard-nav{
+    padding: 0 !important;
+}
+.dashboard-nav-items{
+    width: 15em !important;
+    min-height: 100vh;
+}
+.Participants{
+    margin-left: 1em;
+}
