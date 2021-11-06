@@ -1,5 +1,7 @@
 # Memories
 
+ - [tutorial](https://www.youtube.com/watch?v=LKlO8vLvUao&t=7039s)
+
 ![Memories](https://i.ibb.co/Z8Y0CJv/Screenshot-2020-10-30-at-11-10-04.png)
 
 ## Introduction
