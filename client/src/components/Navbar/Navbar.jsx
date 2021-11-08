@@ -23,7 +23,7 @@ const Navbar = () => {
                             <Typography className={classes.userName} variant="h6" >{user.result.name}</Typography>
                             <Button variant="contained" color="secondary" className={classes.logout}>Logout</Button>
                         </div>
-                    ) : (<Button component={Link} to="/auth" variant="primary">Sign in</Button>)}
+                    ) : (<Button component={Link} to="/auth" variant="contained" color="primary">Sign in</Button>)}
                 </Toolbar>
             </AppBar>
         </div>
