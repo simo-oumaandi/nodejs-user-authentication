@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import useStyles from './styles';
 import Input from './Input';
 import Icon from './Icon';
-import {signup, signin} from '../../actions/auth';
+import { signup, signin } from '../../actions/auth';
 
 // STEP 1 - GO TO GOOGLE DEVELOPER CONSOLE AND CREATE OAUTH CONSENT SCREEN 
 // STEP 2 - CREATE CREDENTIALS FOR OAUTH 2.0 CLIENT IDS , SET ORIGIN URI AND REDIRECT URI
@@ -39,13 +39,14 @@ const Auth = () => {
     }
 
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: [e.target.value] });
+        setFormData({ ...formData, [e.target.name]: e.target.value });
     }
 
 
     const switchMode = (e) => {
         e.preventDefault();
         setIsSignup(prevState => !prevState);
+        setShowPassword(false);
     }
 
 
