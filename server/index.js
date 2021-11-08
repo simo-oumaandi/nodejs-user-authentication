@@ -4,6 +4,8 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 
 import postRoutes from './routes/posts.js';
+import userRoutes from "./routes/users.js";
+
 
 const app = express();
 
@@ -12,6 +14,8 @@ app.use(express.urlencoded({ limit: '30mb', extended: true }))
 app.use(cors());
 
 app.use('/posts', postRoutes);
+app.use("/users", userRoutes);
+
 
 const CONNECTION_URL = 'mongodb://127.0.0.1:27017/test';
 const PORT = process.env.PORT|| 5000;
