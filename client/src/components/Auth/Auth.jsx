@@ -7,11 +7,14 @@ import { useNavigate } from 'react-router-dom';
 import useStyles from './styles';
 import Input from './Input';
 import Icon from './Icon';
+import {signup, signin} from '../../actions/auth';
 
 // STEP 1 - GO TO GOOGLE DEVELOPER CONSOLE AND CREATE OAUTH CONSENT SCREEN 
 // STEP 2 - CREATE CREDENTIALS FOR OAUTH 2.0 CLIENT IDS , SET ORIGIN URI AND REDIRECT URI
 // STEP 3 - GET CLIENT ID AND CLIENT SECRET  
 
+
+const initialState = { firstName: '', lastName: "", email: '', password: '', confirmPassword: '' };
 
 const Auth = () => {
     const CLIENT_ID = "639976478471-u58kobjerg6ra3l7h8hbeotnv73g9cid.apps.googleusercontent.com";
@@ -22,14 +25,21 @@ const Auth = () => {
 
     const [showPassword, setShowPassword] = useState(false);
     const [isSignup, setIsSignup] = useState(false);
+    const [formData, setFormData] = useState(initialState);
 
     const handleShowPassword = () => setShowPassword(prevState => !prevState);
     const handleSubmit = (e) => {
-
+        e.preventDefault();
+        // console.log(formData);
+        if (isSignup) {
+            dispatch(signup(formData, navigate));
+        } else {
+            dispatch(signin(formData, navigate));
+        }
     }
 
     const handleChange = (e) => {
-
+        setFormData({ ...formData, [e.target.name]: [e.target.value] });
     }
 
 
